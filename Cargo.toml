@@ -1,17 +1,18 @@
 [package]
-name = "lazy-mut"
+name = "lazy-mut-rs"
 version = "0.1.0"
 edition = "2021"
 authors = ["Vrtgs"]
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/Vrtgs/lazy-mut"
-documentation = "https://docs.rs/lazy-mut"
+description = "Alternative to LazyLock<Mutex<T>>"
+repository = "https://github.com/Vrtgs/lazy-mut-rs"
+documentation = "https://docs.rs/lazy-mut-rs"
 
 [features]
 default = ["parking_lot"]
-parking_lot = ["dep:parking_lot"]
+parking_lot = ["dep:parking_lot", "std_lock"]
 spin = ["dep:spin"]
-std = ["lock_api/default"]
+std_lock = ["lock_api/default"]
 
 [dependencies]
 cfg-if = "1.0.0"
