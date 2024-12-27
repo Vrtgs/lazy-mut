@@ -15,7 +15,7 @@ enum InitState<T, F> {
 mod poison;
 
 cfg_if! {
-    if #[cfg(feature = "std_lock")] {
+    if #[cfg(feature = "std")] {
         extern crate std;
         mod std_lock;
         pub use std_lock::RawStdMutex;
@@ -35,7 +35,7 @@ macro_rules! declare_lazy_mut {
 cfg_if::cfg_if! {
     if #[cfg(feature = "parking_lot")] {
         declare_lazy_mut!(parking_lot::RawMutex);
-    } else if #[cfg(feature = "std_lock")] {
+    } else if #[cfg(feature = "std")] {
         declare_lazy_mut!(RawStdMutex);
     } else if #[cfg(feature = "spin")] {
         declare_lazy_mut!(spin::Mutex<()>);
@@ -182,7 +182,7 @@ impl<T, F: FnOnce() -> T, M: lock_api::RawMutex> LazyMut<T, F, M> {
     /// # Errors
     /// this function errors if another user of this `LazyMut` panicked while holding the `LazyMut` (when its poisoned)
     /// returns the `LazyMutGuard` wrapped in a Poison Error
-    #[cfg(feature = "std_lock")]
+    #[cfg(feature = "std")]
     pub fn try_get_mut(&self) -> std::sync::LockResult<LazyMutGuard<'_, T, F, M>> {
         self.force_mut()
     }
@@ -231,7 +231,7 @@ mod tests {
         };
     }
 
-    #[cfg(feature = "std_lock")]
+    #[cfg(feature = "std")]
     gen_test!(std_test crate::RawStdMutex);
 
     #[cfg(feature = "parking_lot")]

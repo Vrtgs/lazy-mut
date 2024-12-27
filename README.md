@@ -16,3 +16,15 @@ where the standard library is unavailable.
 * Poisoning Support: Detects panics during initialization and ensures subsequent accesses are safe, marking the instance as poisoned.
 * Configurable Locking: Uses RawMutex from different synchronization backends (e.g., `std`, `parking_lot`, or `spin`) depending on enabled features.
 
+```rust
+use lazy_mut_rs::LazyMut;
+
+static VICTOR: LazyMut<Vec<u8>> = LazyMut::new(|| vec![1, 2, 3]);
+
+fn main() {
+    VICTOR.get_mut().push(10);
+    VICTOR.try_get_mut().unwrap().push(10);
+    
+    assert_eq!(*VICTOR.get_mut(), [1, 2, 3, 10 ,10])
+}
+```

@@ -1,7 +1,7 @@
 use cfg_if::cfg_if;
 
 cfg_if! {
-    if #[cfg(feature = "std_lock")] {
+    if #[cfg(feature = "std")] {
         cfg_if! {
             if #[cfg(panic = "unwind")] {
                 use std::sync::atomic::{AtomicBool, Ordering};
@@ -51,7 +51,7 @@ where
 }
 
 pub struct Flag {
-    #[cfg(all(feature = "std_lock", panic = "unwind"))]
+    #[cfg(all(feature = "std", panic = "unwind"))]
     failed: AtomicBool,
 }
 
@@ -59,7 +59,7 @@ impl Flag {
     #[inline(always)]
     pub const fn new() -> Flag {
         Flag {
-            #[cfg(all(feature = "std_lock", panic = "unwind"))]
+            #[cfg(all(feature = "std", panic = "unwind"))]
             failed: AtomicBool::new(false),
         }
     }
@@ -67,7 +67,7 @@ impl Flag {
     #[inline]
     pub fn guard(&self) -> PoisonLockResult<Guard> {
         let ret = Guard {
-            #[cfg(all(feature = "std_lock", panic = "unwind"))]
+            #[cfg(all(feature = "std", panic = "unwind"))]
             panicking: thread::panicking(),
         };
         if self.get() {
@@ -78,7 +78,7 @@ impl Flag {
     }
 
     #[inline]
-    #[cfg(all(feature = "std_lock", panic = "unwind"))]
+    #[cfg(all(feature = "std", panic = "unwind"))]
     pub fn done(&self, guard: Guard) {
         if !guard.panicking && thread::panicking() {
             self.failed.store(true, Ordering::Relaxed);
@@ -86,30 +86,30 @@ impl Flag {
     }
 
     #[inline(always)]
-    #[cfg(not(all(feature = "std_lock", panic = "unwind")))]
+    #[cfg(not(all(feature = "std", panic = "unwind")))]
     pub fn done(&self, _guard: Guard) {}
 
     #[inline]
-    #[cfg(all(feature = "std_lock", panic = "unwind"))]
+    #[cfg(all(feature = "std", panic = "unwind"))]
     pub fn get(&self) -> bool {
         self.failed.load(Ordering::Relaxed)
     }
 
     #[inline(always)]
-    #[cfg(not(all(feature = "std_lock", panic = "unwind")))]
+    #[cfg(not(all(feature = "std", panic = "unwind")))]
     pub fn get(&self) -> bool {
         false
     }
 
     #[inline]
     pub fn clear(&self) {
-        #[cfg(all(feature = "std_lock", panic = "unwind"))]
+        #[cfg(all(feature = "std", panic = "unwind"))]
         self.failed.store(false, Ordering::Relaxed)
     }
 }
 
 #[derive(Copy, Clone)]
 pub struct Guard {
-    #[cfg(all(feature = "std_lock", panic = "unwind"))]
+    #[cfg(all(feature = "std", panic = "unwind"))]
     panicking: bool,
 }
