@@ -1,11 +1,11 @@
 [package]
 name = "lazy-mut-rs"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 authors = ["Vrtgs"]
 license = "MIT OR Apache-2.0"
 description = "Alternative to LazyLock<Mutex<T>>"
-repository = "https://github.com/Vrtgs/lazy-mut-rs"
+repository = "https://github.com/Vrtgs/lazy-mut"
 documentation = "https://docs.rs/lazy-mut-rs"
 
 [features]
