@@ -17,7 +17,7 @@ where the standard library is unavailable.
 * Configurable Locking: Uses RawMutex from different synchronization backends (e.g., `std`, `parking_lot`, or `spin`) depending on enabled features.
 
 ```rust
-use lazy_mut_rs::LazyMut;
+use lazy_mut::LazyMut;
 
 static VICTOR: LazyMut<Vec<u8>> = LazyMut::new(|| vec![1, 2, 3]);
 
