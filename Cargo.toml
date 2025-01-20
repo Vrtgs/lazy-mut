@@ -1,5 +1,5 @@
 [package]
-name = "lazy-mut"
+name = "lazy_mut"
 version = "0.2.1"
 edition = "2021"
 authors = ["Vrtgs"]
