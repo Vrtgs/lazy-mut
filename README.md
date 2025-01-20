@@ -1,4 +1,4 @@
-# lazy-mut
+# lazy_mut
 
 ## Overview
 The LazyMut library provides a synchronization
